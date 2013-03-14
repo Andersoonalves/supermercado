@@ -1,12 +1,14 @@
 package Sistema;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import pessoas.*;
 import estoque.*;
+import vendas.*;
 
 
 public class Faixada {
@@ -14,10 +16,12 @@ public class Faixada {
 	private static Faixada faixada = null;
 	private GerenteEstoque estoque;
 	private GerentePessoa pessoas;
+	private GerenteVendas vendas;
 	
 	private Faixada(){
 		estoque = new GerenteEstoque();
 		pessoas = new GerentePessoa();
+		vendas = new GerenteVendas();
 	}
 	
 	public static Faixada getInstance(){
@@ -133,5 +137,92 @@ public class Faixada {
     	return pessoas.getFornecedor(razao);
     }
     
-	
+  //Vendas
+    
+    
+    public Venda getVenda(int id) throws ExceptionGerenteVendas{
+		return vendas.getVenda(id);
+    }
+    
+    public List<Venda> getVendas(String nomeCliente) throws ExceptionGerenteVendas{
+		return vendas.getVendas(nomeCliente);
+    }
+    
+    public List<Venda> getVendas(Date d) throws ExceptionGerenteVendas{
+		return vendas.getVendas(d);
+    }
+    
+    public boolean contensVenda(int id){
+    	return vendas.contensVenda(id);    	
+    }
+   //alterei criar para public
+    public boolean criarVenda(Venda v){
+    	return vendas.criar(v);
+    }
+    
+    public boolean criarLinhaVenda(Produto p, double quantidade, double desconto){
+    	return vendas.criarLinhaVenda(p, quantidade, desconto);
+    }
+    
+    public boolean removerLinha (LinhaVenda lv) throws ExceptionGerenteVendas{
+    	return vendas.removerLinha(lv);
+    }
+    
+    public boolean cancelarVenda(){
+    	return vendas.cancelarVenda();
+    }
+    
+    public Venda finalizarVendaAvista(double desconto) throws ExceptionGerenteVendas{
+    	return vendas.finalizarVendaAvista(desconto);
+    }
+    
+    public Venda finalizarVendaAprazo(double desconto,String cliente) throws ExceptionGerenteVendas{
+    	return vendas.finalizarVendaAprazo(desconto, cliente);
+    }
+    
+    public Venda finalizarVendaAprazo(double desconto,String cliente, String dependente) throws ExceptionGerenteVendas{
+    	return vendas.finalizarVendaAprazo(desconto, cliente, dependente);
+    }
+    
+    public List<LinhaVenda> getLinhas() throws ExceptionGerenteVendas{
+    	return vendas.getLinhas();
+    }
+    
+    public Venda getVenda() throws ExceptionGerenteVendas {
+        return vendas.getVenda();
+    }
+    
+    public List<Venda> getVendas()throws ExceptionGerenteVendas {
+        return vendas.getVendas();
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
