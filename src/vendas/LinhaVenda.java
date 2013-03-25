@@ -27,14 +27,14 @@ public class LinhaVenda implements Serializable{
    
     private Venda venda;
     
+    private static int nextId = 0;
+    
     public LinhaVenda() {
-    }
-
-    private LinhaVenda(int id) {
-        this.id = id;
+        this.id = getNextId();
     }
     
     public LinhaVenda (double quantidade, double desconto, Produto p){
+    	this();
     	this.quantidadeVendida = quantidade;
     	this.desconto = desconto;
     	this.codigoProduto = p.getCodigo();
@@ -47,11 +47,11 @@ public class LinhaVenda implements Serializable{
         return id;
     }
 
-    protected void setId(int id) {
-        this.id = id;
+    private int getNextId(){
+    	return nextId++;
     }
-
-
+    
+    
     public String getNomeProduto() {
         return nomeProduto;
     }
@@ -96,8 +96,22 @@ public class LinhaVenda implements Serializable{
     public String toString() {
         return "Entidade.LinhaVenda[ id=" + id + " ]";
     }
+   
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LinhaVenda other = (LinhaVenda) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
 
-    public double getDesconto() {
+	public double getDesconto() {
         return desconto;
     }
 

@@ -7,6 +7,7 @@ package vendas;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class Venda implements Serializable {
@@ -25,41 +26,67 @@ public class Venda implements Serializable {
 
     private Calendar data;
 
-    protected List<LinhaVenda> linhas;
+    private List<LinhaVenda> linhas = new ArrayList<LinhaVenda>();
 
     private double desconto;
 
     private double total;
+    
+    private static int nextId = 0;
+    
+    //meto private que get
 
-
-    protected void addLinha(LinhaVenda lv){
-        if(linhas == null){
-            linhas = new ArrayList<LinhaVenda>();
+    protected void addLinhaVenda2(LinhaVenda lv) throws ExceptionGerenteVendas{
+    	if(linhas.contains(lv)){
+    		throw new ExceptionGerenteVendas("Linha de Venda já foi inserida nesta venda");
+    	}else{
+    		linhas.add(lv);
+    		lv.setVenda(this);
+    	}
+    }
+    
+    public void addLinhaVenda(LinhaVenda lv) throws ExceptionGerenteVendas{
+        if(linhas.contains(lv)){
+    		throw new ExceptionGerenteVendas("Linha de Venda já foi inserida nesta venda");
+    	}else{
+    		linhas.add(lv);
+    		lv.setVenda(this);
+            total+= lv.getTotaldaLinha();
+            desconto+=lv.getDesconto();
+    	}
+    }
+        
+    public boolean getLinhaVenda(int id)throws ExceptionGerenteVendas {
+        for (LinhaVenda v : linhas) {
+            if (v.getId()==(id)) {
+                return true;
+            }
         }
-        linhas.add(lv);
-        total+= lv.getTotaldaLinha();
-        desconto+=lv.getDesconto();
+        throw new ExceptionGerenteVendas("Linha de venda não existe!");
     }
 
-    protected boolean removerLinha(LinhaVenda lv){
-        if(linhas == null || linhas.isEmpty()){
-            return false;
-        }
-        linhas.remove(lv);
-        total-= lv.getTotaldaLinha();
-        desconto-= lv.getDesconto();
-        return true;
+    protected void removerLinhaVenda(LinhaVenda lv) throws ExceptionGerenteVendas{
+    	if(!linhas.contains(lv)){
+    		throw new ExceptionGerenteVendas("Linha de Venda não existe para esta venda");
+    	}else{
+    		linhas.remove(lv);
+    		lv.setVenda(null);
+    		total-= lv.getTotaldaLinha();
+            desconto-= lv.getDesconto();
+    	}	
     }
 
     public List<LinhaVenda>getLinhas(){
         return linhas;
     }
 
-    public Venda() {
+        
+    public Venda(){
+        this.id = Venda.getNextId();
     }
-
-    private Venda(int id) {
-        this.id = id;
+    
+    private static int getNextId(){
+        return nextId++;
     }
 
     public int getId() {
@@ -145,13 +172,9 @@ public class Venda implements Serializable {
         this.data = data;
     }
 
-
     public List<LinhaVenda> getLinhaVendaList() {
-        return linhas;
+        return Collections.unmodifiableList(linhas);
     }
 
-    public void setLinhaVendaList(List<LinhaVenda> linhaVendaList) {
-        this.linhas = linhaVendaList;
-    }
 
     }

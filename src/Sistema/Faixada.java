@@ -155,21 +155,26 @@ public class Faixada {
     public boolean contensVenda(int id){
     	return vendas.contensVenda(id);    	
     }
-   //alterei criar para public
-    public boolean criarVenda(Venda v){
-    	return vendas.criar(v);
+
+
+    public void criarVenda(Venda v) throws ExceptionGerenteVendas{
+    	vendas.criar(v);
     }
     
-    public boolean criarLinhaVenda(Produto p, double quantidade, double desconto){
-    	return vendas.criarLinhaVenda(p, quantidade, desconto);
+    public void criaLinha(LinhaVenda lv) throws ExceptionGerenteVendas{
+    	vendas.criar(lv);
     }
     
-    public boolean removerLinha (LinhaVenda lv) throws ExceptionGerenteVendas{
-    	return vendas.removerLinha(lv);
+    public void removerLinha(LinhaVenda lv) throws ExceptionGerenteVendas{
+    	vendas.removerLinhaVenda(lv);
     }
     
-    public boolean cancelarVenda(){
-    	return vendas.cancelarVenda();
+    public boolean getLinhaVenda (int id) throws ExceptionGerenteVendas{
+    	return vendas.getLinhaVenda(id);
+    }
+    
+    public void cancelarVenda() throws ExceptionGerenteVendas{
+    	vendas.cancelarVenda();
     }
     
     public Venda finalizarVendaAvista(double desconto) throws ExceptionGerenteVendas{
@@ -182,10 +187,6 @@ public class Faixada {
     
     public Venda finalizarVendaAprazo(double desconto,String cliente, String dependente) throws ExceptionGerenteVendas{
     	return vendas.finalizarVendaAprazo(desconto, cliente, dependente);
-    }
-    
-    public List<LinhaVenda> getLinhas() throws ExceptionGerenteVendas{
-    	return vendas.getLinhas();
     }
     
     public Venda getVenda() throws ExceptionGerenteVendas {
