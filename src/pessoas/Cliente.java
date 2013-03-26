@@ -36,19 +36,19 @@ public class Cliente extends Pessoa {
         return debito;
     }
     
-    public void addDebito(double acrecimo)throws ExceptionPessoa{
+    protected void addDebito(double acrecimo)throws ExceptionPessoa{
         if(acrecimo >0){
         	this.debito += acrecimo;
         }else{
-        	throw new ExceptionPessoa("Tentativa de adocionar débito com valor negativo");
+        	throw new ExceptionPessoa("Tentativa de adocionar d��bito com valor negativo");
         }
     }
     
-    public void diminuirDebito(double valor)throws ExceptionPessoa{
+    protected void diminuirDebito(double valor)throws ExceptionPessoa{
         if(valor<=debito){
         	this.debito -= valor;
         }else{
-        	throw new ExceptionPessoa("Tentativa de diminuir débito acima do valor existente");
+        	throw new ExceptionPessoa("Tentativa de diminuir d��bito acima do valor existente");
         }
     }
 

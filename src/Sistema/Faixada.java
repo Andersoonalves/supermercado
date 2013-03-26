@@ -1,5 +1,6 @@
-package Sistema;
+package sistema;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +54,9 @@ public class Faixada {
     	estoque.zerarQuantidadeVendido();
     }
     
+    public void setNomeProduto(Produto p, String nome) throws ExceptionGerenteEstoque{
+        estoque.setNomeProduto(p, nome);
+    }
     public int zerarQuantidadeNegativa(){
     	return estoque.zerarQuantidadeNegativa();
     }
@@ -148,8 +152,8 @@ public class Faixada {
 		return vendas.getVendas(nomeCliente);
     }
     
-    public List<Venda> getVendas(Date d) throws ExceptionGerenteVendas{
-		return vendas.getVendas(d);
+    public List<Venda> getVendas(Calendar dia) throws ExceptionGerenteVendas{
+		return vendas.getVendasData(dia);
     }
     
     public boolean contensVenda(int id){
@@ -198,20 +202,13 @@ public class Faixada {
     }
     
     
+    public void addDebito(String nomeCliente, double acrecimo)throws ExceptionGerentePessoa{
+    	pessoas.addDebito(nomeCliente, acrecimo);
+    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public void diminuirDebito(String nomeCliente, double valor)throws ExceptionGerentePessoa{
+    	pessoas.diminuirDebito(nomeCliente, valor);
+    }
     
     
     

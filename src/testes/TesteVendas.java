@@ -1,12 +1,15 @@
 package testes;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.*;
 
-import Sistema.Faixada;
+import java.util.Calendar;
+
+import sistema.Faixada;
 import vendas.*;
 
 import org.junit.*;
+
+import estoque.Produto;
 
 public class TesteVendas {
 
@@ -27,12 +30,12 @@ public class TesteVendas {
     	return v;
     }
     
-    private LinhaVenda setarLinhaVenda(String nomeProduto, double valorProduto ) {
-		LinhaVenda v = new LinhaVenda();
-		v.setNomeProduto(nomeProduto);
-		v.setValorProduto(valorProduto);
-		return v;
-	}
+    public LinhaVenda setarLinhaVenda(String codigoProduto, String nomeProduto, double quantidade, double desconto){
+    	Produto p = new Produto();
+    	p.setCodigo(codigoProduto);
+    	p.setNome(nomeProduto);
+    	return new LinhaVenda( quantidade,  desconto, p);
+    }
     
     @Test(expected = ExceptionGerenteVendas.class)
     public void procurarVendasComListaVazia() throws ExceptionGerenteVendas {
@@ -55,13 +58,13 @@ public class TesteVendas {
     	Venda c = setarVenda("Maria", 130);
     	f.criarVenda(c);
     	f.finalizarVendaAvista(0);
-    	Venda cc = setarVenda("João", 160);
+    	Venda cc = setarVenda("Joï¿½o", 160);
     	f.criarVenda(cc);
     }
     
     @Test(expected = ExceptionGerenteVendas.class) 
-    public void CriarAMesmaVendaDuasVezes() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("José", 140);
+    public void criarAMesmaVendaDuasVezes() throws ExceptionGerenteVendas{
+    	Venda c = setarVenda("Josï¿½", 140);
     	f.criarVenda(c);
     	f.criarVenda(c);
     }
@@ -83,7 +86,7 @@ public class TesteVendas {
     
     @Test (expected = ExceptionGerenteVendas.class)
     public void cancelarUmaVendaEDepoisFinalizala() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
     	f.cancelarVenda();
     	Assert.assertEquals("Deveria cancelar a venda",c, f.finalizarVendaAprazo(10, c.getCliente()));
@@ -91,7 +94,7 @@ public class TesteVendas {
        
     @Test// a venda so pode ser procurada depois que finalizar-la
     public void procurarUmaVendaPeloId() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
     	f.finalizarVendaAvista(0);
     	Assert.assertEquals("Deveria cancelar a venda",c, f.getVenda(c.getId()));
@@ -99,43 +102,46 @@ public class TesteVendas {
     
     @Test(expected = ExceptionGerenteVendas.class)
     public void procurarUmaVendaPeloIdNaoFinalizada() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
     	f.getVenda(c.getId());
     } 
     
     @Test(expected = ExceptionGerenteVendas.class)
     public void procurarVendaInexistente() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.getVenda(c.getId());
     }
     
     // olhar esses metodos
     @Test
     public void pegarUmaListaDeVendasDeUmCliente() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
     	f.finalizarVendaAvista(0);
-    	f.getVendas("André");
+        assertEquals("Deveria possuir uma venda",1,f.getVendas("Andrï¿½").size());
     }
     
-//    @Test
-//    public void pegarUmaListaDeVendasPorData() throws ExceptionGerenteVendas{
-//    	
-//    }
+    @Test
+    public void pegarUmaListaDeVendasPorData() throws ExceptionGerenteVendas{
+    	Venda c = setarVenda("Maria", 130);
+    	f.criarVenda(c);
+    	f.finalizarVendaAvista(0);
+    	assertEquals("Era para ter apenas uma venda na lista",1,f.getVendas(Calendar.getInstance()).size());
+    }
     @Test
     public void criarLinhaDeVenda() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
-    	LinhaVenda lv = setarLinhaVenda("Cerais", 20);
+    	LinhaVenda lv = setarLinhaVenda("123", "Cerais", 20, 0);
     	f.criaLinha(lv);
     }
    
     @Test (expected = ExceptionGerenteVendas.class)
     public void criarLinhaDeVendaQueJaExiste() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
-    	LinhaVenda lv = setarLinhaVenda("Cerais", 20);
+    	LinhaVenda lv = setarLinhaVenda("123", "Cerais", 20, 0);
     	f.criaLinha(lv);
     	f.criaLinha(lv);
    }
@@ -148,55 +154,64 @@ public class TesteVendas {
    
     @Test
     public void removerLinhaDeVenda() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
-    	LinhaVenda lv = setarLinhaVenda("Cerais", 20);
+    	LinhaVenda lv = setarLinhaVenda("123", "Cerais", 20, 0);
     	f.criaLinha(lv);
     	f.removerLinha(lv);
     }
     
     @Test (expected = ExceptionGerenteVendas.class)
     public void removerLinhaDeVendaEDepoisProcurala() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
-    	LinhaVenda lv = setarLinhaVenda("Cerais", 20);
+    	LinhaVenda lv = setarLinhaVenda("123", "Cerais", 20, 0);
     	f.criaLinha(lv);
     	f.removerLinha(lv);   
-    	f.getLinhaVenda(lv.getId());
+    	assertFalse("Deveria ter removido a linha de venda",f.getLinhaVenda(lv.getId()));
     }	
     
     @Test
     public void finalizarVendaAvista() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
+    	assertNotNull( "Deviria ter finalizado a venda corretamente",f.finalizarVendaAvista(0));
+    }
+  //olhar pq nï¿½o estï¿½ dando certo
+//    
+    @Test (expected = ExceptionGerenteVendas.class)
+    public void finalizarVendaAvistaAntesDeCriala() throws ExceptionGerenteVendas{
     	f.finalizarVendaAvista(0);
     }
-  //olhar pq não está dando certo
-//    
-//    @Test (expected = ExceptionGerenteVendas.class)
-//    public void finalizarVendaAvistaAntesDeCriala() throws ExceptionGerenteVendas{
-//    	f.finalizarVendaAvista(0);
-//    }
     
     @Test
     public void finalizarVendaAprazo() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
-    	c.setDependente("José");
+    	Venda c = setarVenda("Andrï¿½", 230);
+    	c.setDependente("Josï¿½");
     	f.criarVenda(c);
-    	f.finalizarVendaAprazo(0,c.getCliente(), c.getDependente());
+    	assertNotNull( "Deviria ter finalizado a venda corretamente",f.finalizarVendaAprazo(0,c.getCliente(), c.getDependente()));
     }
    
-    //olhar se está certo
+    //olhar se estï¿½ certo
     @Test
-    public void pegarLinhasDeVendaDeUmaVenda() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    public void pegarLinhasDeVendaSemTerAdicionadaNaVenda() throws ExceptionGerenteVendas{
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
-    	c.getLinhas();
+    	assertTrue("Nao deve possuir nenhuma linda de venda",c.getLinhas().isEmpty());
+    }
+    
+    @Test
+    public void pegarLinhasDeVendaNaVenda() throws ExceptionGerenteVendas{
+    	Venda c = setarVenda("Andrï¿½", 230);
+    	f.criarVenda(c);
+    	LinhaVenda lv = setarLinhaVenda("123", "Cerais", 20, 0);
+    	f.criaLinha(lv);
+    	assertFalse("Deve possuir pelomenos uma linda de venda",c.getLinhas().isEmpty());
     }
     
     @Test
     public void pegarVendas() throws ExceptionGerenteVendas{
-    	Venda c = setarVenda("André", 230);
+    	Venda c = setarVenda("Andrï¿½", 230);
     	f.criarVenda(c);
     	f.finalizarVendaAvista(0);
     	Venda cc = setarVenda("Maria", 280);
@@ -205,7 +220,7 @@ public class TesteVendas {
     	Venda ccc = setarVenda("Ana", 130);
     	f.criarVenda(ccc);
     	f.finalizarVendaAvista(0);
-    	f.getVendas();
+    	assertEquals("Era para ter apenas tres venda na lista",3,f.getVendas().size());
     }
 
 }

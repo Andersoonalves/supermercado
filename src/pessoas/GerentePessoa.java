@@ -61,7 +61,7 @@ public class GerentePessoa {
                 return c;
             }
         }
-    	throw new ExceptionGerentePessoa("Cliente não cadastrado");
+    	throw new ExceptionGerentePessoa("Cliente n��o cadastrado");
     }
     
     public boolean adicionarDependente(String nome, String nomeCliente) throws ExceptionGerentePessoa {
@@ -90,7 +90,7 @@ public class GerentePessoa {
                 return f;
             }
         }
-        throw new ExceptionGerentePessoa("Funcionário não cadastrado");
+        throw new ExceptionGerentePessoa("Funcion��rio n��o cadastrado");
     }
     
     public boolean adicionarFornecedor(Fornecedor f){
@@ -110,13 +110,13 @@ public class GerentePessoa {
                 return f;
             }
         }
-        throw new ExceptionGerentePessoa ("Fornecedor não cadastrado");
+        throw new ExceptionGerentePessoa ("Fornecedor n��o cadastrado");
     }
    
     
     public void setarSenhaFuncionario(Funcionario f, String senha, String senhaAntiga)throws ExceptionGerentePessoa{
     	if(senha == null){
-    		throw new ExceptionGerentePessoa("Valor da senha inválido");
+    		throw new ExceptionGerentePessoa("Valor da senha inv��lido");
     	}else if(f.getSenha() ==  null || f.getSenha().equalsIgnoreCase(senhaAntiga)){
     		f.setSenha(senha);
     	}else{
@@ -125,6 +125,24 @@ public class GerentePessoa {
     }
     public boolean validarSenhaFuncionario(Funcionario f, String senha){
     	return f.getSenha().equalsIgnoreCase(senha);
+    }
+    
+    public void addDebito(String nomeCliente, double acrecimo)throws ExceptionGerentePessoa{
+    	Cliente c = getCliente(nomeCliente);
+        if(acrecimo >0){
+        	c.addDebito(acrecimo);
+        }else{
+        	throw new ExceptionPessoa("Tentativa de adocionar d��bito com valor negativo");
+        }
+    }
+    
+    public void diminuirDebito(String nomeCliente, double valor)throws ExceptionGerentePessoa{
+    	Cliente c = getCliente(nomeCliente);
+        if(valor<=c.getDebito()){
+        	c.diminuirDebito(valor);
+        }else{
+        	throw new ExceptionPessoa("Tentativa de diminuir d��bito acima do valor existente");
+        }
     }
     
 }

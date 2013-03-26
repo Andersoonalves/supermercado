@@ -38,7 +38,7 @@ public class Venda implements Serializable {
 
     protected void addLinhaVenda2(LinhaVenda lv) throws ExceptionGerenteVendas{
     	if(linhas.contains(lv)){
-    		throw new ExceptionGerenteVendas("Linha de Venda já foi inserida nesta venda");
+    		throw new ExceptionGerenteVendas("Linha de Venda jï¿½ foi inserida nesta venda");
     	}else{
     		linhas.add(lv);
     		lv.setVenda(this);
@@ -47,7 +47,7 @@ public class Venda implements Serializable {
     
     public void addLinhaVenda(LinhaVenda lv) throws ExceptionGerenteVendas{
         if(linhas.contains(lv)){
-    		throw new ExceptionGerenteVendas("Linha de Venda já foi inserida nesta venda");
+    		throw new ExceptionGerenteVendas("Linha de Venda jï¿½ foi inserida nesta venda");
     	}else{
     		linhas.add(lv);
     		lv.setVenda(this);
@@ -62,12 +62,12 @@ public class Venda implements Serializable {
                 return true;
             }
         }
-        throw new ExceptionGerenteVendas("Linha de venda não existe!");
+        throw new ExceptionGerenteVendas("Linha de venda nï¿½o existe!");
     }
 
     protected void removerLinhaVenda(LinhaVenda lv) throws ExceptionGerenteVendas{
     	if(!linhas.contains(lv)){
-    		throw new ExceptionGerenteVendas("Linha de Venda não existe para esta venda");
+    		throw new ExceptionGerenteVendas("Linha de Venda nï¿½o existe para esta venda");
     	}else{
     		linhas.remove(lv);
     		lv.setVenda(null);
@@ -176,5 +176,16 @@ public class Venda implements Serializable {
         return Collections.unmodifiableList(linhas);
     }
 
+    public boolean isMesmoDia(Calendar dia){// nao vai funcionar com compareTo nem equls por causa das horas
+    	if(this.data.get(Calendar.YEAR) == dia.get(Calendar.YEAR) ){
+    		if(this.data.get(Calendar.MONTH) == dia.get(Calendar.MONTH) ){
+        		if(this.data.get(Calendar.DAY_OF_MONTH) == dia.get(Calendar.DAY_OF_MONTH) ){
+            		return true;
+            	}
+        	}
+    	}
+    	return false;
+    }
+    
 
     }

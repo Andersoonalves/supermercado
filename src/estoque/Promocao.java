@@ -6,28 +6,26 @@ public class Promocao {
     
     
     private int id;
-    
-    private Calendar inici;
+
+	private Calendar inici;
    
     private Calendar fim;
   
     private double desconto;
     
     private double maximodeVendas;
+    
 
     public Promocao() {
+    	
     }
-
-    public Promocao(Integer id) {
-        this.id = id;
-    }
+    
+    public void setId(int id) {
+		this.id = id;
+	}
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Calendar getInici() {

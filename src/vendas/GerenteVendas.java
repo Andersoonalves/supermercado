@@ -1,6 +1,5 @@
 package vendas;
 
-import Sistema.Faixada;
 import estoque.Produto;
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -10,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pessoas.ExceptionGerentePessoa;
+import sistema.Faixada;
 
 public class GerenteVendas {
 
@@ -43,20 +43,6 @@ public class GerenteVendas {
         return vends;
     }
 
-    public List<Venda> getVendas (Date d) throws ExceptionGerenteVendas{
-        List<Venda> vends = new ArrayList<Venda>();
-        for (Venda v : vendas) {
-            if (v.getData().equals(d)) {
-                vends.add(v);
-            }
-        }
-        if(vends.isEmpty()){
-        	throw new ExceptionGerenteVendas("Nenhuma venda encontrada nesta data");
-        }
-        return vends;
-    }
-    
-    
     public boolean contensVenda(int id) {
         try {
         	getVenda(id);
@@ -191,7 +177,10 @@ public class GerenteVendas {
     }
 
     public Venda finalizarVendaAvista(double desconto) throws ExceptionGerenteVendas {
-       return this.finazilarVenda(desconto, FormaPagamento.A_VISTA.titulo, atual.getCliente(), atual.getDependente());
+    	if(atual != null){
+    		return this.finazilarVenda(desconto, FormaPagamento.A_VISTA.titulo, atual.getCliente(), atual.getDependente());
+    	}
+    	throw new ExceptionGerenteVendas( "A venda deve ser criada antes de ser finalizada" );
     }
 
     public Venda finalizarVendaAprazo(double desconto, String cliente) throws ExceptionGerenteVendas {
@@ -215,6 +204,25 @@ public class GerenteVendas {
     	}
         return vendas;
     }
-
+    
+    public List<Venda> getVendasData(Calendar dia) throws ExceptionGerenteVendas {
+    	if (vendas.isEmpty()){
+    		throw new ExceptionGerenteVendas("Não existem vendas cadastradas");
+    	}
+    	List<Venda> vends = new ArrayList<Venda>();
+    	for(Venda v : vendas){
+    		if(v.isMesmoDia(dia)){
+    			vends.add(v);
+    		}
+    	}
+    	if (vends.isEmpty()){
+    		throw new ExceptionGerenteVendas("Não existem vendas cadastradas neste dia");
+    	}
+        return vends;
+    }
+    
+    
+   
+    
  
 }

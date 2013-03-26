@@ -29,7 +29,7 @@ public class GerenteEstoque {
 	    public boolean adicionarProduto(Produto p) throws ExceptionGerenteEstoque {
 	    	
 	    	if(p.getNome() == null || p.getCodigo() == null){
-	    		throw new ExceptionGerenteEstoque("Nome ou Codigo não inicializados");
+	    		throw new ExceptionGerenteEstoque("Nome ou Codigo n��o inicializados");
 	    	}
 	        if (!contensProduto(p.getCodigo()) && !contensProduto(p.getNome())) {
 	            return produtos.add(p);
@@ -74,10 +74,10 @@ public class GerenteEstoque {
 	    public boolean adicionarPromocao(Promocao p, String nomeOUcodigo) throws ExceptionGerenteEstoque {
 	    	    	
 	    	if (getProduto(nomeOUcodigo)== null){
-	    		throw new ExceptionGerenteEstoque("Produto  não exite");
+	    		throw new ExceptionGerenteEstoque("Produto  n��o exite");
 	    	}
 	    	if (p.getId() == 0){
-	    		throw new ExceptionGerenteEstoque(" Promocao não exite");
+	    		throw new ExceptionGerenteEstoque(" Promocao n��o exite");
 	    	}
 	    	 Produto prod = getProduto(nomeOUcodigo);
 	        
@@ -124,4 +124,17 @@ public class GerenteEstoque {
 	        }
 	        return null;
 	    }
+	    
+	    public void setNomeProduto(Produto p, String nome) throws ExceptionGerenteEstoque{
+            if(p.getNome() == null || p.getCodigo() == null){
+                    throw new ExceptionGerenteEstoque("Nome ou Codigo nÃ£o inicializados");
+            }
+        if (!contensProduto(nome)) {
+                p.setNome(nome);
+        }else{
+                throw new ExceptionGerenteEstoque("Nome de produto já cadastrado!");
+        }
+    }
+	    
+	    
 }
